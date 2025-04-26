@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Editar Factura</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        <div class="row">
+            <!-- RUC -->
+            <div class="col-md-4">
+                <label for="ruc">RUC</label>
+                <input type="text" class="form-control" name="ruc" value="{{ factura[1] }}" required>
+            </div>
+
+            <!-- Serie -->
+            <div class="col-md-2">
+                <label for="serie">Serie</label>
+                <input type="text" class="form-control" name="serie" value="{{ factura[2] }}" required>
+            </div>
+
+            <!-- Número de documento -->
+            <div class="col-md-3">
+                <label for="num_documento">N° Documento</label>
+                <input type="text" class="form-control" name="num_documento" value="{{ factura[3] }}" required>
+            </div>
+
+            <div class="col-md-4 mt-3">
+                <label for="modalidad">Modalidad</label>
+                <select name="modalidad" class="form-control" required>
+                    <option value="">Seleccionar...</option>
+                    <option value="VIATICOS LIMA" {% if factura[4] == 'VIATICOS LIMA' %}selected{% endif %}>VIATICOS LIMA</option>
+                    <option value="VIATICOS SUR" {% if factura[4] == 'VIATICOS SUR' %}selected{% endif %}>VIATICOS SUR</option>
+                    <option value="VIATICOS NORTE" {% if factura[4] == 'VIATICOS NORTE' %}selected{% endif %}>VIATICOS NORTE</option>
+                    <option value="CAJA CHICA LIMA" {% if factura[4] == 'CAJA CHICA LIMA' %}selected{% endif %}>CAJA CHICA LIMA</option>
+                    <option value="CAJA CHICA AQP" {% if factura[4] == 'CAJA CHICA AQP' %}selected{% endif %}>CAJA CHICA AQP</option>
+                    <option value="CAJA CHICA CIX" {% if factura[4] == 'CAJA CHICA CIX' %}selected{% endif %}>CAJA CHICA CIX</option>
+                </select>
+            </div>
+            
+
+            <!-- Fecha de emisión -->
+            <div class="col-md-4 mt-3">
+                <label for="fecha_emision">Fecha de emisión</label>
+                <input type="date" class="form-control" name="fecha_emision" value="{{ factura[5] }}">
+            </div>
+
+            <!-- Tipo de comprobante -->
+            <div class="col-md-4 mt-3">
+                <label for="tipo_comprobante">Tipo de comprobante</label>
+                <select name="tipo_comprobante" class="form-control" required>
+                    <option value="">Seleccionar...</option>
+                    <option value="Boleta" {% if factura[6] == 'Boleta' %}selected{% endif %}>Boleta</option>
+                    <option value="Factura" {% if factura[6] == 'Factura' %}selected{% endif %}>Factura</option>
+                </select>
+            </div>
+            
+
+            <!-- Producto -->
+            <div class="col-md-4 mt-3">
+                <label for="id_producto">Producto</label>
+                <select name="id_producto" class="form-control">
+                    {% for p in productos %}
+                    <option value="{{ p[0] }}" {% if p[0] == factura[7] %}selected{% endif %}>{{ p[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Proyecto -->
+            <div class="col-md-4 mt-3">
+                <label for="id_proyecto">Proyecto</label>
+                <select name="id_proyecto" class="form-control">
+                    {% for pr in proyectos %}
+                    <option value="{{ pr[0] }}" {% if pr[0] == factura[8] %}selected{% endif %}>{{ pr[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Ciudad -->
+            <div class="col-md-4 mt-3">
+                <label for="id_ciudad">Ciudad</label>
+                <select name="id_ciudad" class="form-control">
+                    {% for c in ciudades %}
+                    <option value="{{ c[0] }}" {% if c[0] == factura[10] %}selected{% endif %}>{{ c[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Importe -->
+            <div class="col-md-4 mt-3">
+                <label for="importe">Importe</label>
+                <input type="number" step="0.01" class="form-control" name="importe" value="{{ factura[11] }}" required>
+            </div>
+
+            <!-- IGV -->
+            <div class="col-md-4 mt-3 d-flex align-items-end">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="incluye_igv" value="1"
+                        {% if factura[12] == 1 %}checked{% endif %}>
+                    <label class="form-check-label">Incluye IGV</label>
+                </div>
+            </div>
+
+            <!-- Documento -->
+            <div class="col-md-8 mt-3">
+                <label for="documento">Archivo adjunto (PDF/JPG/PNG)</label>
+                {% if factura[13] %}
+                <div class="mb-2">
+                    <a href="{{ url_for('static', filename='uploads/' ~ factura[13]) }}" target="_blank"
+                        class="btn btn-sm btn-outline-primary">Ver archivo actual</a>
+                </div>
+                {% endif %}
+                <input type="file" name="documento" class="form-control">
+            </div>
+        </div>
+
+        <!-- Botón guardar -->
+        <div class="mt-4">
+            <button type="submit" class="btn btn-success">Guardar cambios</button>
+            <a href="{{ url_for('home') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
